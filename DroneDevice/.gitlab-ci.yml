@@ -1,0 +1,17 @@
+image: "docker.corp.geoscan.aero/uav-devices/dronedevice/build:latest"
+
+test:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  cache:
+    paths:
+      - build/Tests
+  stage: test
+  script:
+    - mkdir -p build
+    - cd build
+    - cmake .. -DDRONEDDEVICE_CODE_COVERAGE=ON
+    - cmake --build . --config Debug -- -j $(nproc)
+    - ctest
+  after_script:
+    - gcovr -e build/Tests -e Tests build

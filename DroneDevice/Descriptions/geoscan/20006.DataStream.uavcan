@@ -1,0 +1,6 @@
+#
+# Raw data stream.
+#
+
+uint8 id
+uint8[<=256] data

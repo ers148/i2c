@@ -1,0 +1,30 @@
+include(Math)
+
+set(PLATFORM "STM32F0xx")
+set(PLATFORM ${PLATFORM} PARENT_SCOPE)
+
+math(EXPR RAM_SIZE "1024 * 16")
+math(EXPR ROM_PAGE "1024 * 2")
+
+if(DFU_LAYOUT)
+    hex2dec(SPEC_OFFSET     08005000)
+    math(EXPR SPEC_SIZE     "1024 * 2")
+    hex2dec(EEPROM_OFFSET   08005800)
+    math(EXPR EEPROM_SIZE   "1024 * 2")
+    hex2dec(FIRMWARE_OFFSET 08006000)
+    math(EXPR FIRMWARE_SIZE "1024 * 104")
+    set(REQUIRE_WDT TRUE)
+else()
+    hex2dec(FIRMWARE_OFFSET 08000000)
+    math(EXPR FIRMWARE_SIZE "1024 * 126")
+    hex2dec(SPEC_OFFSET     0801F800)
+    math(EXPR SPEC_SIZE     "0")
+    hex2dec(EEPROM_OFFSET   0801F800)
+    math(EXPR EEPROM_SIZE   "1024 * 2")
+    set(REQUIRE_WDT FALSE)
+endif()
+
+# Prepare version variables
+set(VERSION_HW "1.1")
+set(VERSION_HW_NAME "${PROJECT_NAME}")
+set(VERSION_SW_NAME "${PROJECT_NAME}")
